@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.nav-links{
+  @apply flex items-center gap-2 text-lg hover:bg-gray-300 dark:hover:text-gray-800 rounded-sm px-2 py-2
+}
