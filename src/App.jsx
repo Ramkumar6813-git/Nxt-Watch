@@ -1,4 +1,3 @@
-import React from 'react'
 import ThemeContextProvider from './contexts/ThemeContextProvider'
 import { Route, Routes } from 'react-router-dom'
 import LoginForm from './pages/Login'

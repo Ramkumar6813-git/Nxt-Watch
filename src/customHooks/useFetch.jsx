@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -8,42 +8,43 @@ const apiStatusConstants = {
 };
 
 const useFetch = ({ url, options }) => {
-  const [apiData, setApiData] = useState(null);
+  const [apiData, setApiData] = useState(null); // Default to null instead of empty array
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
   const [error, setError] = useState(null);
 
-  const fetchData = useCallback(async () => {
-    const controller = new AbortController();
-
-    try {
-      setApiStatus(apiStatusConstants.inProgress);
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP Error: ${response.status}`);
-      }
-
-      const result = await response.json();
-      setApiData(result ?? []);
-      setApiStatus(apiStatusConstants.success);
-    } catch (err) {
-      if (err.name !== "AbortError") {
-        setError(err);
-        setApiStatus(apiStatusConstants.failure);
-      }
-    } finally {
-      controller.abort();
-    }
-  }, [url, options]);
-
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    const controller = new AbortController();
+    const fetchData = async () => {
+      try {
+        setApiStatus(apiStatusConstants.inProgress);
+        const response = await fetch(url, {
+          ...options,
+          signal: controller.signal,
+          mode: "cors",
+        });
 
-  return { apiData, apiStatus, error, refetch: fetchData };
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+
+        const result = await response.json();
+        setApiData(result ?? []);
+        setApiStatus(apiStatusConstants.success);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setError(err.message);
+          setApiStatus(apiStatusConstants.failure);
+        }
+      }
+    };
+
+    fetchData();
+    return () => controller.abort(); // Cleanup request on dependency change
+  }, [url]);
+
+  return { apiData, apiStatus, error };
 };
 
 export default useFetch;
+
+
+
+

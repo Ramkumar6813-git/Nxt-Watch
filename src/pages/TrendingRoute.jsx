@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "../components/Navbar";
 import SideNavbar from "../components/SideNavbar";
 import VideoDetailsCard from "../components/VideoDetailsCard";
