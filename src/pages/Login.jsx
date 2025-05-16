@@ -32,7 +32,6 @@ export default function LoginForm() {
 
     try {
       const response = await fetch(loginUrl, options);
-      console.log(response);
       const data = await response.json();
       if (response.ok) {
         Cookies.set("jwt_token", data.jwt_token, { expires: 30 });
@@ -41,7 +40,7 @@ export default function LoginForm() {
         setError(data.error_msg);
       }
     } catch (err) {
-      setError("Something went wrong. Please try again.");
+      setError(err);
     }
   };
 
@@ -76,7 +75,7 @@ export default function LoginForm() {
             name="username"
             className="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500"
             placeholder="rahul"
-            autoComplete="on"
+            autoComplete="username"
             onChange={handleChange}
             value={userDetails.username}
             required
@@ -97,7 +96,7 @@ export default function LoginForm() {
             name="password"
             className="w-full mt-1 p-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500"
             placeholder="rahul@2021"
-            autoComplete="on"
+            autoComplete="current-password"
             onChange={handleChange}
             value={userDetails.password}
             required

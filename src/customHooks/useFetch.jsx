@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 const apiStatusConstants = {
   initial: "INITIAL",
@@ -8,38 +8,42 @@ const apiStatusConstants = {
 };
 
 const useFetch = ({ url, options }) => {
-  const [apiData, setApiData] = useState(null); // Default to null instead of empty array
+  const [apiData, setApiData] = useState(null);
   const [apiStatus, setApiStatus] = useState(apiStatusConstants.initial);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     const controller = new AbortController();
-    const fetchData = async () => {
-      try {
-        setApiStatus(apiStatusConstants.inProgress);
-        const response = await fetch(url, {
-          ...options,
-          signal: controller.signal,
-        });
 
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+    try {
+      setApiStatus(apiStatusConstants.inProgress);
+      const response = await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
 
-        const result = await response.json();
-        setApiData(result ?? []);
-        setApiStatus(apiStatusConstants.success);
-      } catch (err) {
-        if (err.name !== "AbortError") {
-          setError(err.message);
-          setApiStatus(apiStatusConstants.failure);
-        }
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
       }
-    };
 
+      const result = await response.json();
+      setApiData(result ?? []);
+      setApiStatus(apiStatusConstants.success);
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        setError(err);
+        setApiStatus(apiStatusConstants.failure);
+      }
+    } finally {
+      controller.abort();
+    }
+  }, [url, options]);
+
+  useEffect(() => {
     fetchData();
-        return () => controller.abort(); // Cleanup request on dependency change
-  }, [url]);
+  }, [fetchData]);
 
-  return { apiData, apiStatus, error };
+  return { apiData, apiStatus, error, refetch: fetchData };
 };
 
 export default useFetch;
