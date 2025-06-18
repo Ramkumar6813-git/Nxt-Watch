@@ -44,7 +44,7 @@ const SavedVideos = () => {
             onClick={() => dispatch(deleteAllSavedVideos())}
             className="ml-auto text-amber-600 font-semibold dark:text-amber-400 md:border-1 md:px-2 md:py-1 border-amber-600 dark:border-amber-400 hover:md:bg-amber-600 hover:md:text-white md:rounded-sm transition-colors duration-100 cursor-pointer"
           >
-            Delete
+            Remove All
           </button>
         </div>
 
@@ -62,11 +62,11 @@ const SavedVideos = () => {
 
             return (
               <Link to={`/video-details/${id}`} key={id}>
-                <div className="shadow-md hover:shadow-lg dark:shadow-gray-700 rounded-sm flex flex-col lg:flex-row p-4 mb-6 bg-white dark:bg-gray-900">
+                <div className="relative shadow-md hover:shadow-lg dark:shadow-gray-700 rounded-sm flex flex-col lg:flex-row p-4 mb-6 bg-white dark:bg-gray-900">
                   <img
                     src={thumbnail_url}
                     alt={title}
-                    className="w-full lg:w-80 object-cover rounded-md"
+                    className="w-full lg:w-80 max-h-40 object-contain rounded-md"
                   />
                   <div className="flex p-4 gap-4">
                     <img
@@ -87,6 +87,7 @@ const SavedVideos = () => {
                       </div>
                     </div>
                   </div>
+                  {/* <button className="text-black text-md font-semibold cursor-pointer hover:scale-105 transition-all duration-100 ease-in-out absolute right-10 top-20 dark:text-white">Remove</button> */}
                 </div>
               </Link>
             );
