@@ -5,7 +5,9 @@ import useFetch from "../customHooks/useFetch";
 import { FaGamepad } from "react-icons/fa6";
 import "../App.css";
 
-const jwtToken = import.meta.env.VITE_JWT_TOKEN;
+
+import Cookies from "js-cookie";
+const jwtToken = Cookies.get("jwt_token");
 
 const Loader = () => {
   const placeholders = Array.from({ length: 12 });

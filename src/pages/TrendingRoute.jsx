@@ -5,7 +5,9 @@ import useFetch from "../customHooks/useFetch";
 import { FaFire } from "react-icons/fa";
 import "../App.css";
 
-const jwtToken = import.meta.env.VITE_JWT_TOKEN;
+import  Cookies  from "js-cookie";
+
+const jwtToken = Cookies.get("jwt_token");
 
 const Loader = () => {
   const rangeArray = Array.from({ length: 12 }, (_, i) => i + 1);

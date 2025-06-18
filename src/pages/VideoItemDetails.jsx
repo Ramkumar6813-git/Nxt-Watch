@@ -14,8 +14,9 @@ import useFetch from "../customHooks/useFetch";
 import Navbar from "../components/Navbar";
 import SideNavbar from "../components/SideNavbar";
 import "../App.css";
+import Cookies from 'js-cookie';
 
-const jwtToken = import.meta.env.VITE_JWT_TOKEN;
+const jwtToken = Cookies.get("jwt_token");
 
 // Loading Skeleton
 const Loader = () => (

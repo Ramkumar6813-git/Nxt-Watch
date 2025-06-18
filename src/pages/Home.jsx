@@ -11,7 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import "../App.css";
 import { useTheme } from "../contexts/ThemeContextProvider";
 
-const jwtToken = import.meta.env.VITE_JWT_TOKEN;
+import Cookies from "js-cookie";
+const jwtToken = Cookies.get("jwt_token");
 
 const Home = () => {
   const [showBanner, setShowBanner] = useState(true);
